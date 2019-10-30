@@ -2,7 +2,7 @@
 
 | operating system | ip address  | hostname           | slurm version | 
 |------------------|-------------|--------------------|---------------|
-| CentOS 7.7       | 10.8.15.207 | zhiyuanWorkstation | 18.08         |
+| CentOS 7.7       | 10.8.15.207 | zhiyuanWorkstation | 19.05         |
 | Fedora 30        | 10.8.15.92  | zhaofengLapTop     | 19.05         |
 
 
