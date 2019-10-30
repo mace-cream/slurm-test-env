@@ -1,7 +1,12 @@
-Manage node ip: 10.8.15.92 (fengzhao's laptop; Fedora 30)
-Compute node ip: 10.8.15.207 (zhiyuan's workstation; CentOS 7)
+## Computer
 
-Test User: 
+| operating system | ip address  | hostname           | slurm version | 
+|------------------|-------------|--------------------|---------------|
+| CentOS 7.7       | 10.8.15.207 | zhiyuanWorkstation | 18.08         |
+| Fedora 30        | 10.8.15.92  | zhaofengLapTop     | 19.05         |
+
+
+## Test User
 
 | username  | passwd      | uid  | gid  |
 |-----------|-------------|------|------|
