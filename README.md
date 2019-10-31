@@ -32,7 +32,11 @@ srun hostname
 * `firewalld` should be disabled on all machines.
 
 ## How to create user with the same UID and GID on same machine?
-
+```shell
+sudo groupadd -g 1010 zhaofengt
+sudo useradd -d /home/zhaofengt -g zhaofengt -u 1010 -s /bin/bash -m zhaofengt
+sudo passwd zhaofengt
+```
 
 ## Firewall
 Check the opening port
