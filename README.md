@@ -1,10 +1,10 @@
 ## Computer
 
-| operating system | ip address  | hostname           | slurm version | 
-|------------------|-------------|--------------------|---------------|
-| CentOS 7.7       | 10.8.15.207 | zhiyuanWorkstation | 19.05         |
-| Fedora 30        | 10.8.15.92  | zhaofengLapTop     | 19.05         |
-| Raspbian 8       | 10.8.15.90  | raspberrypi        | 19.05         |
+| architecture | operating system | ip address  | hostname           | slurm version | 
+|--------------|------------------|-------------|--------------------|---------------|
+| x86_64       | CentOS 7.7       | 10.8.15.207 | zhiyuanWorkstation | 19.05         |
+| x86_64       | Fedora 30        | 10.8.15.92  | zhaofengLapTop     | 19.05         |
+| armhf        | Raspbian 8       | 10.8.15.90  | raspberrypi        | 19.05         |
 
 `zhiyuanWorkstation` is the manage node.
 
