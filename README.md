@@ -7,6 +7,7 @@
 
 
 ## Test User
+The users exist on all computers list above.
 
 | username  | passwd      | uid  | gid  |
 |-----------|-------------|------|------|
@@ -14,6 +15,7 @@
 | zhiyuant  | qinghua2019 | 1011 | 1011 |
 
 
+`zhaofengt` is the user with sudo privilege. You can login to the computers through `ssh` if you are on the 15th floor of C2, Nanshan Park.
 
 [Installation Guide](https://www.slothparadise.com/how-to-install-slurm-on-centos-7-cluster/)
 
@@ -25,3 +27,4 @@ Check the opening port
 ```shell
 sudo firewall-cmd --list-ports
 ```
+
