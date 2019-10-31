@@ -28,7 +28,8 @@ srun hostname
 ```
 
 ## Known Issues
-`slurmd` cannot be started as system daemon service on `zhaofengLapTop`.
+* `slurmd` cannot be started as system daemon service on `zhaofengLapTop`. 
+* `firewalld` should be disabled on all machines.
 
 ## How to create user with the same UID and GID on same machine?
 
