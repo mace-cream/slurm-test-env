@@ -39,4 +39,5 @@ Check the opening port
 ```shell
 sudo firewall-cmd --list-ports
 ```
-
+## Available binary for CentOS 7
+See [copr](https://copr.fedorainfracloud.org/coprs/cmdntrf/Slurm19-nvml/package/slurm/)
