@@ -24,7 +24,7 @@ The users exist on all computers list above.
 ## Test Command
 On manage node, use the following command to test that the whole system works.
 ```shell
-srun echo hostname
+srun hostname
 ```
 
 ## Known Issues
