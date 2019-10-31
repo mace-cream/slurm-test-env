@@ -18,3 +18,10 @@
 [Installation Guide](https://www.slothparadise.com/how-to-install-slurm-on-centos-7-cluster/)
 
 ## How to create user with the same UID and GID on same machine?
+
+
+## Firewall
+Check the opening port
+```shell
+sudo firewall-cmd --list-ports
+```
