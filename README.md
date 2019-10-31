@@ -46,3 +46,9 @@ sudo firewall-cmd --list-ports
 ```
 ## Available binary for CentOS 7
 See [copr](https://copr.fedorainfracloud.org/coprs/cmdntrf/Slurm19-nvml/package/slurm/)
+
+
+## job Queue
+zhaofeng's laptop only has two physical cpus. The number of logical cpus is 4 due to hyperthreading. Only two jobs are allowed to run simultaneously. The third job should 
+wait.
+
