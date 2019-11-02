@@ -28,13 +28,21 @@ On manage node, use the following command to test that the whole system works.
 ```shell
 srun -w zhaofengLapTop hostname
 srun -w raspberrypi,raspberrypi2 /bin/hostname
+sbatch --array=0-9 job.sh
+```
+The content of `job.sh` is as follows:
+```shell
+#!/bin/bash
+python3 -c "import times;times.sleep(30)"
 ```
 
 ## Known Issues
-* `slurmd` cannot be started as system daemon service on `zhaofengLapTop` and `raspberry`. 
+* `slurmd` cannot be started as system daemon service on `zhaofengLapTop` and `raspberry`. Use `sudo slurmd` instead. No need to kill old `slurmd` as the newly start process will replace the old one automatically.
 * `firewalld` should be disabled on all machines.
+* IP addresses may change when you setup the whole system next time. Modify `slurm.conf` and DNS forward zone file `cluster.local.zone` correspondingly.
 
 ## How to create user with the same UID and GID on same machine?
+With the example user `zhaofengt` and UID = GID = 1010, the command is as follows:
 ```shell
 sudo groupadd -g 1010 zhaofengt
 sudo useradd -d /home/zhaofengt -g zhaofengt -u 1010 -s /bin/bash -m zhaofengt
@@ -87,3 +95,7 @@ ssh -p 8990 zhaofengt@localhost # on bcm server
 
 ## Further experiment
 With the test environment, we can submit some test jobs and observe the queue behaviour with `squeue`. We also test the job array functionality in our test environment.
+
+## How to setup the hardware again on the 15th floor
+You need 4 workstation positions. One should be relatively stable, which is used as manage node. We recommend to use desktop computer as manage node. For the other three 
+computing nodes. You can three `raspberrypi`. Each "pi" should be powered and connected to the local network by network cable.
