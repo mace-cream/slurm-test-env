@@ -56,7 +56,18 @@ step. As a result, we use heterogeneous architecture to build our cluster test e
    we should compile 19.5 from source code. Actually we do the compilation on the board (instead virtual machine) and notice that it is slow process.
 1. The configuration file is generated using [configurator.easy](https://slurm.schedmd.com/configurator.easy.html). For our configuration, we use `root` to start
    `slurmctld`. That is, `SlurmUser=root`. We use `Cgroup` to track the process; therefore `cgroup.conf` should exist in the same directory of `slurm.conf`on all nodes.   
-
+1. Other utilities can help administrators to manage the cluster. For example, we use ssh key to make `ssh raspberrypi` without password prompt; We setup a DNS server, the 
+   setup file of forward zone can be found at this repository (`cluster.local.zone`). The service is called `named`, coming from `bind` package for RHEL. The DNS server is used
+   to map the hostname to its ip address. To achieve this, we need add the DNS server entry in `/etc/resolv.conf`. We also use the `pdsh` utility (with gender database) to execute
+   commands on multiple nodes. The test command is `pdsh -A python3 --version`. With this command, the output is as follows:
+   ```
+    [zhaofengt@zhiyuanWorkstation ~]$ pdsh -A python3 --version
+    raspberrypi: Python 3.4.2
+    zhaofengLaptop: Python 3.7.3
+    raspberrypi2: Python 3.7.3
+   ```
+   Since the official package of `pdsh` on CentOS 7 does not support `gender` backend. We need to compile `pdsh` from source code and add `export PDSH_RCMD_TYPE=ssh` in our admin `.bashrc`.
+   
 Available binary for CentOS 7, see [copr](https://copr.fedorainfracloud.org/coprs/cmdntrf/Slurm19-nvml/package/slurm/)
 
 
@@ -73,4 +84,6 @@ Then you can login via
 ```shell
 ssh -p 8990 zhaofengt@localhost # on bcm server
 ```
+
 ## Further experiment
+With the test environment, we can submit some test jobs and observe the queue behaviour with `squeue`. We also test the job array functionality in our test environment.
