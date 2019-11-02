@@ -99,3 +99,6 @@ With the test environment, we can submit some test jobs and observe the queue be
 ## How to setup the hardware again on the 15th floor
 You need 4 workstation positions. One should be relatively stable, which is used as manage node. We recommend to use desktop computer as manage node. For the other three 
 computing nodes. You can three `raspberrypi`. Each "pi" should be powered and connected to the local network by network cable.
+
+Below are some pictures about our environment:
+![](laptop_and_login_node.jpg)
