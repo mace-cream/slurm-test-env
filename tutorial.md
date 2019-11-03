@@ -24,8 +24,11 @@ Building a cluster can be divided into three big steps in general:
 
 Below we will show in detail how I finish the three steps.
 
-##
-`zhiyuanWorkstation` is the manage node.
+## Connection
+To make the cluster more stable, we use wired cable to connect each computer to the cable socket. 
+You should document the ip address of each computer for later usage.
+Since I use `zhiyuanWorkstation` as the manage node, which has the monitor connected to the host, I can login to this host locally with the keyboard.
+
 
 ## Test User
 The users exist on all computers list above.

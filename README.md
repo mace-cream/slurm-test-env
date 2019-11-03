@@ -103,3 +103,4 @@ computing nodes. You can three `raspberrypi`. Each "pi" should be powered and co
 Below are some pictures about our environment:
 ![](laptop_and_login_node.jpg)
 ![](raspberrypi.jpg)
+![](zhiyuanWorkstation.jpg)
