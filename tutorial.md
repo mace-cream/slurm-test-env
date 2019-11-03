@@ -58,6 +58,13 @@ Since we use heterogeneous operating systems, they have different package manage
 For Debian series, `apt` is the manager instead. For the software we used, the two series may have different package names, which are
 summarized in the following table.
 
+| Software       | CentOS 7.7      | Fedora 30      | Raspbian 8          | Raspbian 10    |
+|----------------|-----------------|----------------|---------------------|----------------|
+| openssh server | openssh-server  | openssh-server | openssh-server      | openssh-server |
+| slurm          | slurm-slurmctld | slurm-slurmd   | compile from source |  slurmd        |
+| python3        | do not need     |                | compile from source |                |
+
+
 Then we install the openssh server on all nodes. The service name is called `sshd` on
 RHEL and `ssh` on Raspbian.  The package name is called `openssh-server` on all distributions.
 
