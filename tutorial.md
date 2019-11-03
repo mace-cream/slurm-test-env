@@ -1,11 +1,26 @@
 # How to make a computing cluster using slurm
-You may hear about the concept of computing cluster, which consists of one manage node and several compute node basically. Users login to manage node and submit their computing tasks using a workload manager. Cluster management is more difficult than management of a single multi-user computer. It is beneficial for cluster manager if they install the computing cluster by themselves. If you want to try to build a test environment of computing cluster and you have several “computers” at hand, this tutorial will suit your need.
+
+Author: Feng Zhao, Zhiyuan Wu
+
+You may hear about the concept of computing cluster, which consists of one manage node and several compute nodes basically. 
+Users login to manage node and submit their computing tasks using a workload manager. 
+Cluster management is more difficult than management of a single multi-user computer. 
+It is beneficial for cluster manager if they install the computing cluster by themselves. 
+If you want to try to build a test environment of computing cluster and you have several “computers” at hand, this tutorial will suit your need.
+
 
 ## Before you start
-In this tutorial, I will use existing resources in my lab: one workstation desktop running CentOS operating system, one laptop running Fedora and two Raspberry Pi boards. That is, I have 4 "computers" in total. Since you may not have the same resources as me, some details may be different. But the general workflow to configure the cluster is the same. 
+In this tutorial, We will use existing resources in our lab: 
+one workstation desktop running CentOS operating system, one laptop running Fedora and two Raspberry Pi boards. 
+That is, We have 4 "computers" in total. 
+Since you may not have the same resources as us, 
+some details may be different. But the general workflow to configure the cluster is the same. 
 
-[Raspberry Pi](https://www.raspberrypi.org/) is a tiny computer used in embedding systems. It runs on arm architecture while our PCs run on x86 architecture. I will use the workstation desktop as the manage node for the cluster and the left three as compute node. 
-Generally speaking, in production environment we should use the same architecture and operating system to build a cluster. But for my test environment, I don't follow this and use the existing operating system on each machine to achieve my goal.
+[Raspberry Pi](https://www.raspberrypi.org/) is a tiny computer used in embedding systems. 
+It runs on arm architecture while our PCs run on x86 architecture. 
+We will use the workstation desktop as the manage node for the cluster and the left three as compute nodes. 
+Generally speaking, in production environment we should use the same architecture and operating system to build a cluster. 
+But for our test environment, we don't follow this and use the existing operating system on each machine to achieve our goal.
 
 The exact configuration is shown in the following table:
 
@@ -22,13 +37,29 @@ Building a cluster can be divided into three big steps in general:
 1. configuration of ssh, users and dns server
 1. install the workload manager
 
+Our goal is to build a cluster for high performance computing (HPC) purpose. The cluster architecture for other domains may be different. For example,
+workload manager may not be needed. You can skip step 3 if you do not need it.
+
 Below we will show in detail how I finish the three steps.
 
 ## Connection
 To make the cluster more stable, we use wired cable to connect each computer to the cable socket. 
 You should document the ip address of each computer for later usage.
 Since I use `zhiyuanWorkstation` as the manage node, which has the monitor connected to the host, I can login to this host locally with the keyboard.
+After logging in to the manage node. We use `ping` command to test the network connection between the manage node and each compute node. For example,
+use `ping -c 4 10.8.15.92` to test for `zhaofengLapTop`.
 
+## Configuration
+The first step is to close the firewall service on the system. 
+The service name is called `firewalld` on RHEL derivative. 
+You can also not disable this service but open some ports instead. We omit this configuration.
+
+Since we use heterogeneous operating systems, they have different package managers. For RHEL series, `yum` is the package manager.
+For Debian series, `apt` is the manager instead. For the software we used, the two series may have different package names, which are
+summarized in the following table.
+
+Then we install the openssh server on all nodes. The service name is called `sshd` on
+RHEL and `ssh` on Raspbian.  The package name is called `openssh-server` on all distributions.
 
 ## Test User
 The users exist on all computers list above.
@@ -76,8 +107,7 @@ Resources are limited. We do not have control over the router and we do not have
 What we have is an environment of intranet, an old laptop with Fedora, a PC with CentOS and several Rasberry Pi 3B. Reinstalling the OS is time consuming and we omit this
 step. As a result, we use heterogeneous architecture to build our cluster test environment.
 
-1. Make sure all the nodes are physically connected in an intranet. To easy the configuration, the ssh server should be opened on all the nodes. The service name is called `sshd` on
-    RHEL and `ssh` on Raspbian.  The package name is called `openssh-server` on all distributions. Create users `zhaofengt` and `zhiyuant` on all nodes. Make sure the users have the same UID and GID on different nodes.
+1. Make sure all the nodes are physically connected in an intranet. To easy the configuration, the ssh server should be opened on all the nodes.  Create users `zhaofengt` and `zhiyuant` on all nodes. Make sure the users have the same UID and GID on different nodes.
 1. `munge` should be installed on all nodes. See [Install Guide](https://github.com/dun/munge/wiki/Installation-Guide) for detail. The `munge.key` should be the same on all machines.
     This package can be installed using `apt` or `yum`.
 1. Install `slurmctld` on manage node and `slurmd` on compute node. The version of `slurmctld` and `slurmd` may not be exactly the same, as announced by [slurm official](https://slurm.schedmd.com/troubleshoot.html#network).
@@ -121,5 +151,4 @@ With the test environment, we can submit some test jobs and observe the queue be
 You need 4 workstation positions. One should be relatively stable, which is used as manage node. We recommend to use desktop computer as manage node. For the other three 
 computing nodes. You can three `raspberrypi`. Each "pi" should be powered and connected to the local network by network cable.
 
-Below are some pictures about our environment:
-![](laptop_and_login_node.jpg)
+
