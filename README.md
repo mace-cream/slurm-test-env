@@ -5,7 +5,7 @@
 | x86_64       | CentOS 7.7       | 10.8.15.207 | zhiyuanWorkstation | 19.05         | /etc/slurm/slurm.conf |
 | x86_64       | Fedora 30        | 10.8.15.92  | zhaofengLapTop     | 19.05         | /etc/slurm/slurm.conf |
 | armhf        | Raspbian 8       | 10.8.15.88  | raspberrypi        | 19.05         | /etc/slurm.conf       |
-| armhf        | Raspbian 10      | 10.8.15.87  | raspberrypi2       | 18.08         | /etc/slurm/slurm.conf |
+| armhf        | Raspbian 10      | 10.8.15.87  | raspberrypi2       | 18.08         | /etc/slurm-llnl/slurm.conf |
 
 `zhiyuanWorkstation` is the manage node.
 
@@ -102,3 +102,4 @@ computing nodes. You can three `raspberrypi`. Each "pi" should be powered and co
 
 Below are some pictures about our environment:
 ![](laptop_and_login_node.jpg)
+![](raspberrypi.jpg)
