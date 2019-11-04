@@ -105,6 +105,12 @@ Then you can login via
 ```shell
 ssh -p 8990 zhaofengt@localhost # on bcm server
 ```
+## TroubleShooting
+If one node get unexpected reboot, the node state is still down even after `slurmd` daemon is running properly on this node. To fix this problem, run the following
+command on manage node (suppose the problem is with node `raspberrypi2`):
+```shell
+sudo scontrol update nodename=raspberrypi2 status=idle
+```
 
 ## Further experiment
 With the test environment, we can submit some test jobs and observe the queue behaviour with `squeue`. We also test the job array functionality in our test environment.
