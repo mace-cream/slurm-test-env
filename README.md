@@ -66,7 +66,12 @@ step. As a result, we use heterogeneous architecture to build our cluster test e
    `slurmctld`. That is, `SlurmUser=root`. We use `Cgroup` to track the process; therefore `cgroup.conf` should exist in the same directory of `slurm.conf`on all nodes.   
 1. Other utilities can help administrators to manage the cluster. For example, we use ssh key to make `ssh raspberrypi` without password prompt; We setup a DNS server, the 
    setup file of forward zone can be found at this repository (`cluster.local.zone`). The service is called `named`, coming from `bind` package for RHEL. The DNS server is used
-   to map the hostname to its ip address. To achieve this, we need add the DNS server entry in `/etc/resolv.conf`. We also use the `pdsh` utility (with gender database) to execute
+   to map the hostname to its ip address. To achieve this, we need add the DNS server entry in `/etc/resolv.conf`. 
+   ```
+   search cluster.local
+   nameserver 127.0.0.1
+   ```
+   We also use the `pdsh` utility (with gender database) to execute
    commands on multiple nodes. The test command is `pdsh -A python3 --version`. With this command, the output is as follows:
    ```
     [zhaofengt@zhiyuanWorkstation ~]$ pdsh -A python3 --version
