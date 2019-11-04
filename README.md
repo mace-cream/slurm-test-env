@@ -65,7 +65,15 @@ step. As a result, we use heterogeneous architecture to build our cluster test e
 1. The configuration file is generated using [configurator.easy](https://slurm.schedmd.com/configurator.easy.html). For our configuration, we use `root` to start
    `slurmctld`. That is, `SlurmUser=root`. We use `Cgroup` to track the process; therefore `cgroup.conf` should exist in the same directory of `slurm.conf`on all nodes.   
 1. Other utilities can help administrators to manage the cluster. For example, we use ssh key to make `ssh raspberrypi` without password prompt; We setup a DNS server, the 
-   setup file of forward zone can be found at this repository (`cluster.local.zone`). The service is called `named`, coming from `bind` package for RHEL. The DNS server is used
+   setup file of forward zone can be found at this repository (`cluster.local.zone`), which should be put in directory `/var/named/`. The service is called `named`, coming from `bind` package for RHEL. 
+   The setup file is located at `/etc/named.conf`. Add the following entry to this file:
+   ```
+   zone "cluster.local" IN {
+        type master;
+        file "cluster.local.zone";
+    };
+   ```
+   The DNS server is used
    to map the hostname to its ip address. To achieve this, we need add the DNS server entry in `/etc/resolv.conf`. 
    ```
    search cluster.local
