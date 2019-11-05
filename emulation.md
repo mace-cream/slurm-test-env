@@ -1,0 +1,2 @@
+
+See [emulate raspberrypi](https://azeria-labs.com/emulate-raspberry-pi-with-qemu/).

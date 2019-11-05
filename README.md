@@ -1,10 +1,10 @@
 ## Computer
 
-| architecture | operating system | ip address  | hostname           | slurm version | slurm config file     |
-|--------------|------------------|-------------|--------------------|---------------|-----------------------|
-| x86_64       | CentOS 7.7       | 10.8.15.207 | zhiyuanWorkstation | 19.05         | /etc/slurm/slurm.conf |
-| x86_64       | Fedora 30        | 10.8.15.92  | zhaofengLapTop     | 19.05         | /etc/slurm/slurm.conf |
-| armhf        | Raspbian 8       | 10.8.15.88  | raspberrypi        | 19.05         | /etc/slurm.conf       |
+| architecture | operating system | ip address  | hostname           | slurm version | slurm config file          |
+|--------------|------------------|-------------|--------------------|---------------|----------------------------|
+| x86_64       | CentOS 7.7       | 10.8.15.207 | zhiyuanWorkstation | 19.05         | /etc/slurm/slurm.conf      |
+| x86_64       | Fedora 30        | 10.8.15.92  | zhaofengLapTop     | 19.05         | /etc/slurm/slurm.conf      |
+| armhf        | Raspbian 8       | 10.8.15.88  | raspberrypi        | 18.08         | /etc/slurm-llnl/slurm.conf |
 | armhf        | Raspbian 10      | 10.8.15.87  | raspberrypi2       | 18.08         | /etc/slurm-llnl/slurm.conf |
 
 `zhiyuanWorkstation` is the manage node.
@@ -37,7 +37,7 @@ python3 -c "import times;times.sleep(30)"
 ```
 
 ## Known Issues
-* `slurmd` cannot be started as system daemon service on `zhaofengLapTop` and `raspberry`. Use `sudo slurmd` instead. No need to kill old `slurmd` as the newly start process will replace the old one automatically.
+* `slurmd` cannot be started as system daemon service on `zhaofengLapTop`. Use `sudo slurmd` instead. No need to kill old `slurmd` as the newly start process will replace the old one automatically.
 * `firewalld` should be disabled on all machines.
 * IP addresses may change when you setup the whole system next time. Modify `slurm.conf` and DNS forward zone file `cluster.local.zone` correspondingly.
 
@@ -65,8 +65,21 @@ step. As a result, we use heterogeneous architecture to build our cluster test e
 1. The configuration file is generated using [configurator.easy](https://slurm.schedmd.com/configurator.easy.html). For our configuration, we use `root` to start
    `slurmctld`. That is, `SlurmUser=root`. We use `Cgroup` to track the process; therefore `cgroup.conf` should exist in the same directory of `slurm.conf`on all nodes.   
 1. Other utilities can help administrators to manage the cluster. For example, we use ssh key to make `ssh raspberrypi` without password prompt; We setup a DNS server, the 
-   setup file of forward zone can be found at this repository (`cluster.local.zone`). The service is called `named`, coming from `bind` package for RHEL. The DNS server is used
-   to map the hostname to its ip address. To achieve this, we need add the DNS server entry in `/etc/resolv.conf`. We also use the `pdsh` utility (with gender database) to execute
+   setup file of forward zone can be found at this repository (`cluster.local.zone`), which should be put in directory `/var/named/`. The service is called `named`, coming from `bind` package for RHEL. 
+   The setup file is located at `/etc/named.conf`. Add the following entry to this file:
+   ```
+   zone "cluster.local" IN {
+        type master;
+        file "cluster.local.zone";
+    };
+   ```
+   The DNS server is used
+   to map the hostname to its ip address. To achieve this, we need add the DNS server entry in `/etc/resolv.conf`. 
+   ```
+   search cluster.local
+   nameserver 127.0.0.1
+   ```
+   We also use the `pdsh` utility (with gender database) to execute
    commands on multiple nodes. The test command is `pdsh -A python3 --version`. With this command, the output is as follows:
    ```
     [zhaofengt@zhiyuanWorkstation ~]$ pdsh -A python3 --version
@@ -91,6 +104,12 @@ ssh -R 10.8.4.170:8990:10.8.15.207:22 feng@10.8.4.170
 Then you can login via
 ```shell
 ssh -p 8990 zhaofengt@localhost # on bcm server
+```
+## TroubleShooting
+If one node get unexpected reboot, the node state is still down even after `slurmd` daemon is running properly on this node. To fix this problem, run the following
+command on manage node (suppose the problem is with node `raspberrypi2`):
+```shell
+sudo scontrol update nodename=raspberrypi2 status=idle
 ```
 
 ## Further experiment
