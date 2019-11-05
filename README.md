@@ -109,7 +109,7 @@ ssh -p 8990 zhaofengt@localhost # on bcm server
 If one node get unexpected reboot, the node state is still down even after `slurmd` daemon is running properly on this node. To fix this problem, run the following
 command on manage node (suppose the problem is with node `raspberrypi2`):
 ```shell
-sudo scontrol update nodename=raspberrypi2 status=idle
+sudo scontrol update nodename=raspberrypi2 state=idle
 ```
 
 ## Further experiment
