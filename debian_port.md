@@ -30,7 +30,7 @@ Before you can successfully build the package, you need to change some package v
 dpkg-buildpackage -uc -us -j4
 ```
 
-##Important Notice:
+## Important Notice:
    To compile `slurm 18.08` successfully on `jessie`. You need to upgrade `debhelper` to 10.2. For raspbian, it seems that the version is already 10.2 (I guess raspbian merges jessie backports to the main).
    But for normal jessie distribution, you should install `debhelper 10.2` from `jessie backports` explicitly.
 ```shell
