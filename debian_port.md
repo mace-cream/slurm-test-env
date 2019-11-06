@@ -1,4 +1,5 @@
-# How to port new software to old system?
+# How to port new software to old system -- Build Slurm 18.08 on Debian Jessie
+
 Suppose you are using debian 8. The default version of slurm is only 14, which is too old. To use a newer version, you can download the source code from 
 the official website of slurm and build from source code. Then you can install it. This procedure is ok but it has two problems:
 
@@ -30,7 +31,7 @@ dpkg-buildpackage -uc -us -j4
 ```
 
 ##Important Notice:
-   To compile `slurm 18.04` successfully on `jessie`. You need to upgrade `debhelper` to 10.2. For raspbian, it seems that the version is already 10.2 (I guess raspbian merges jessie backports to the main).
+   To compile `slurm 18.08` successfully on `jessie`. You need to upgrade `debhelper` to 10.2. For raspbian, it seems that the version is already 10.2 (I guess raspbian merges jessie backports to the main).
    But for normal jessie distribution, you should install `debhelper 10.2` from `jessie backports` explicitly.
 ```shell
 echo "deb http://archive.debian.org/debian jessie-backports main" > /etc/apt/sources.list.d/jessie-backports.list
