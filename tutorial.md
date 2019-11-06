@@ -81,7 +81,14 @@ yum install munge # on CentOS 7.7 or Fedora 30
 apt install munge # on Raspbian 8 or Raspbian 10
 ```
 
-All is straightforward except for slurm on Raspbian 8. We can not use the default slurm version, which is 14.03 and too old. We should compile slurm 18.08 from source on Raspbian 8.
+All is straightforward except for two cases:
+```shell
+curl https://copr.fedorainfracloud.org/coprs/cmdntrf/Slurm19-nvml/repo/epel-7/cmdntrf-Slurm19-nvml-epel-7.repo -o /etc/yum.repo.d/slurm.repo
+yum makecache
+yum install slurm-slurmctld
+```
+
+slurm on Raspbian 8. We can not use the default slurm version, which is 14.03 and too old. We should compile slurm 18.08 from source on Raspbian 8.
 This is not an easy task. To omit this step, we have packed the binary artifact in deb format. All you should do is all our apt source, update and install slurm 18.08
 on the fly:
 ```shell
@@ -120,6 +127,12 @@ echo "foo" >/etc/munge/munge.key
 ```
 
 The `munge.key` should be the same on all machines. You can use `scp` to transfer this file to other machines on the same location.
+Then use the following command to start the munge daemon:
+```shell
+systemctl start munge
+systemctl status munge
+journalctl -u munge -r # reverse
+```
 
 ### Configure slurm
 Slurm has two configuration files: `slurm.conf` and `cgroup.conf`. The location of `slurm.conf` is not all the same on different machines and is shown in previous table.
@@ -152,14 +165,19 @@ NodeName=raspberrypi2 NodeAddr=10.8.15.87 CPUs=4 ThreadsPerCore=1 State=UNKNOWN
 PartitionName=debug Nodes=ALL Default=YES MaxTime=INFINITE State=UP OverSubscribe=YES
 ```
 We use root user to run `slurmctld` on manage node, which is specified by `SlurmUser=root`.
+
 The content of `cgroup.conf` is as follows:
 ```
 CgroupAutomount=yes
 ConstrainCores=yes
 ConstrainRAMSpace=no
 ```
+After creating the files on manage node. Copy these two files to each compute node at the specific location. Then you can start the daemon process on each node.
+The service name is called `slurmctld` on manage node and `slurmd` on computing node. This is similar with how you start the `munge` daemon process.
 
-## Test Command
+
+### Test Command
+After all daemon process started, you can test the computing cluster using test accound. First, ssh login to the manage node using `zhaofengt`.
 On manage node, use the following command to test that the whole system works.
 ```shell
 srun -w zhaofengLapTop hostname
@@ -172,57 +190,15 @@ The content of `job.sh` is as follows:
 python3 -c "import times;times.sleep(30)"
 ```
 
-## Known Issues
-* `slurmd` cannot be started as system daemon service on `zhaofengLapTop` and `raspberry`. Use `sudo slurmd` instead. No need to kill old `slurmd` as the newly start process will replace the old one automatically.
-* `firewalld` should be disabled on all machines.
-* IP addresses may change when you setup the whole system next time. Modify `slurm.conf` and DNS forward zone file `cluster.local.zone` correspondingly.
 
 
-## Steps
-Ideally, we should have a router, many wired lines and 4 computers. However, 
-Resources are limited. We do not have control over the router and we do not have so many computers.
-What we have is an environment of intranet, an old laptop with Fedora, a PC with CentOS and several Rasberry Pi 3B. Reinstalling the OS is time consuming and we omit this
-step. As a result, we use heterogeneous architecture to build our cluster test environment.
 
-1. Make sure all the nodes are physically connected in an intranet. To easy the configuration, the ssh server should be opened on all the nodes.  Create users `zhaofengt` and `zhiyuant` on all nodes. Make sure the users have the same UID and GID on different nodes.
-1. `munge` should be installed on all nodes. See [Install Guide](https://github.com/dun/munge/wiki/Installation-Guide) for detail. The `munge.key` should be the same on all machines.
-    This package can be installed using `apt` or `yum`.
-1. Install `slurmctld` on manage node and `slurmd` on compute node. The version of `slurmctld` and `slurmd` may not be exactly the same, as announced by [slurm official](https://slurm.schedmd.com/troubleshoot.html#network).
-   Since Debian 10 has officially packaged 18.8, we just install `slurmd` on Debian 10 using `apt` without compiling from source code. However, for Debian 8 the version is only 14. Therefore
-   we should compile 19.5 from source code. Actually we do the compilation on the board (instead virtual machine) and notice that it is slow process.
-1. The configuration file is generated using [configurator.easy](https://slurm.schedmd.com/configurator.easy.html). For our configuration, we use `root` to start
-   `slurmctld`. That is, `SlurmUser=root`. We use `Cgroup` to track the process; therefore `cgroup.conf` should exist in the same directory of `slurm.conf`on all nodes.   
-1. Other utilities can help administrators to manage the cluster. For example, we use ssh key to make `ssh raspberrypi` without password prompt; We setup a DNS server, the 
-   setup file of forward zone can be found at this repository (`cluster.local.zone`). The service is called `named`, coming from `bind` package for RHEL. The DNS server is used
-   to map the hostname to its ip address. To achieve this, we need add the DNS server entry in `/etc/resolv.conf`. We also use the `pdsh` utility (with gender database) to execute
-   commands on multiple nodes. The test command is `pdsh -A python3 --version`. With this command, the output is as follows:
-   ```
-    [zhaofengt@zhiyuanWorkstation ~]$ pdsh -A python3 --version
-    raspberrypi: Python 3.4.2
-    zhaofengLaptop: Python 3.7.3
-    raspberrypi2: Python 3.7.3
-   ```
-   Since the official package of `pdsh` on CentOS 7 does not support `gender` backend. We need to compile `pdsh` from source code and add `export PDSH_RCMD_TYPE=ssh` in our admin `.bashrc`.
+
+
    
-Available binary for CentOS 7, see [copr](https://copr.fedorainfracloud.org/coprs/cmdntrf/Slurm19-nvml/package/slurm/)
 
 
-## job Queue
-zhaofeng's laptop only has two physical cpus. The number of logical cpus is 4 due to hyperthreading. Only two jobs are allowed to run simultaneously. The third job should 
-wait.
 
-## Tunneling
-If you are not on 15th floor, assume the following command is executed on `zhiyuanWorkstation` and the session is kept.
-```shell
-ssh -R 10.8.4.170:8990:10.8.15.207:22 feng@10.8.4.170
-```
-Then you can login via
-```shell
-ssh -p 8990 zhaofengt@localhost # on bcm server
-```
-
-## Further experiment
-With the test environment, we can submit some test jobs and observe the queue behaviour with `squeue`. We also test the job array functionality in our test environment.
 
 
 # Reference
