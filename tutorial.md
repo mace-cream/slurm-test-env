@@ -49,8 +49,8 @@ Since I use `zhiyuanWorkstation` as the manage node, which has the monitor conne
 After logging in to the manage node. We use `ping` command to test the network connection between the manage node and each compute node. For example,
 use `ping -c 4 10.8.15.92` to test for `zhaofengLapTop`.
 
-## Configuration
-### Install software
+## Installation
+
 The first step is to close the firewall service on the system. 
 The service name is called `firewalld` on RHEL derivative. 
 You can also not disable this service but open some ports instead. We omit this configuration.
@@ -89,20 +89,75 @@ echo "deb https://dl.bintray.com/zhaofeng-shu33/raspbian8/ jessie contrib" > /et
 apt-get update
 apt install slurmd=18.08
 ```
+## Configuration
+### Test User
+When installing new softwares, we act as a sudo user. But for our computing cluster to work, we need to ensure that users with the same name, user id and group id 
+exists on all nodes.
 
-## Test User
-The users exist on all computers list above.
+We use the following two users:
 
 | username  | passwd      | uid  | gid  |
 |-----------|-------------|------|------|
 | zhaofengt | fengzhao    | 1010 | 1010 |
 | zhiyuant  | qinghua2019 | 1011 | 1011 |
 
+With the example user `zhaofengt` and UID = GID = 1010, the command to create it is as follows:
+```shell
+sudo groupadd -g 1010 zhaofengt
+sudo useradd -d /home/zhaofengt -g zhaofengt -u 1010 -s /bin/bash -m zhaofengt
+sudo passwd zhaofengt
+```
+You should execute it on each node respectively.
+### Configure Munge
+Generally there are two steps to configure the munge:
+1. generate `munge.key` and copy it to all nodes
+2. start the `munge` service on all nodes
 
-`zhaofengt` is the user with sudo privilege on all nodes. You can login to the computers through `ssh` if you are on the 15th floor of C2, Nanshan Park.
+To generate `munge.key`, using the following command:
+```shell
+dd if=/dev/urandom bs=1 count=1024 > /etc/munge/munge.key
+echo "foo" >/etc/munge/munge.key
+```
 
-[Installation Guide](https://www.slothparadise.com/how-to-install-slurm-on-centos-7-cluster/)
+The `munge.key` should be the same on all machines. You can use `scp` to transfer this file to other machines on the same location.
 
+### Configure slurm
+Slurm has two configuration files: `slurm.conf` and `cgroup.conf`. The location of `slurm.conf` is not all the same on different machines and is shown in previous table.
+`cgroup.conf` should be put in the same directory of `slurm.conf`. The content of these two files should be the same on all machines.
+The content of `slurm.conf` is as follows:
+```
+SlurmctldHost=zhiyuanWorkstation(10.8.15.207)
+MpiDefault=none
+ProctrackType=proctrack/cgroup
+ReturnToService=1
+SlurmctldPidFile=/var/run/slurmctld.pid
+SlurmdPidFile=/var/run/slurmd.pid
+SlurmdSpoolDir=/var/spool/slurmd
+SlurmUser=root
+StateSaveLocation=/var/spool
+SwitchType=switch/none
+TaskPlugin=task/affinity
+SchedulerType=sched/backfill
+SelectType=select/cons_res
+SelectTypeParameters=CR_CPU
+AccountingStorageType=accounting_storage/filetxt
+AccountingStorageLoc=/var/log/slurm/accounting
+ClusterName=cluster
+JobAcctGatherType=jobacct_gather/linux
+JobCompType=jobcomp/filetxt
+JobCompLoc=/var/log/slurm/job_completions
+NodeName=zhaofengLapTop NodeAddr=10.8.15.92 CPUs=4 State=UNKNOWN
+NodeName=raspberrypi NodeAddr=10.8.15.88 CPUs=4 ThreadsPerCore=1 State=UNKNOWN
+NodeName=raspberrypi2 NodeAddr=10.8.15.87 CPUs=4 ThreadsPerCore=1 State=UNKNOWN
+PartitionName=debug Nodes=ALL Default=YES MaxTime=INFINITE State=UP OverSubscribe=YES
+```
+We use root user to run `slurmctld` on manage node, which is specified by `SlurmUser=root`.
+The content of `cgroup.conf` is as follows:
+```
+CgroupAutomount=yes
+ConstrainCores=yes
+ConstrainRAMSpace=no
+```
 
 ## Test Command
 On manage node, use the following command to test that the whole system works.
@@ -122,13 +177,6 @@ python3 -c "import times;times.sleep(30)"
 * `firewalld` should be disabled on all machines.
 * IP addresses may change when you setup the whole system next time. Modify `slurm.conf` and DNS forward zone file `cluster.local.zone` correspondingly.
 
-## How to create user with the same UID and GID on same machine?
-With the example user `zhaofengt` and UID = GID = 1010, the command is as follows:
-```shell
-sudo groupadd -g 1010 zhaofengt
-sudo useradd -d /home/zhaofengt -g zhaofengt -u 1010 -s /bin/bash -m zhaofengt
-sudo passwd zhaofengt
-```
 
 ## Steps
 Ideally, we should have a router, many wired lines and 4 computers. However, 
@@ -176,8 +224,7 @@ ssh -p 8990 zhaofengt@localhost # on bcm server
 ## Further experiment
 With the test environment, we can submit some test jobs and observe the queue behaviour with `squeue`. We also test the job array functionality in our test environment.
 
-## How to setup the hardware again on the 15th floor
-You need 4 workstation positions. One should be relatively stable, which is used as manage node. We recommend to use desktop computer as manage node. For the other three 
-computing nodes. You can three `raspberrypi`. Each "pi" should be powered and connected to the local network by network cable.
 
-
+# Reference
+1. [Munge Installation-Guide](https://github.com/dun/munge/wiki/Installation-Guide)
+1. [Slurm Installation-Guide](https://slurm.schedmd.com/quickstart_admin.html)
