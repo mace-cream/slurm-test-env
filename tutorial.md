@@ -63,7 +63,7 @@ summarized in the following table.
 | openssh server | openssh-server  | openssh-server | openssh-server      | openssh-server    |
 | munge          | munge           | munge          | munge               | munge             |
 | slurm          | slurm-slurmctld | slurm-slurmd   | compile from source | slurmd            |
-| python         | do not need     |  python3       | python3.4-minimal   | python3.7-minimal |
+| python         | do not need     | python3        | python3.4-minimal   | python3.7-minimal |
 
 
 Then we install the openssh server on all nodes. The service name is called `sshd` on
@@ -74,7 +74,20 @@ systemctl status sshd
 ```
 
 After the installation of openssh server, we can detect the monitor, mouse and keyboard from the computing node. Only power and network cable are necessary.
+Then you can use the package manager to install `munge`, `slurm` and `python` on each platform. 
+```shell
+yum install munge # on CentOS 7.7 or Fedora 30
+apt install munge # on Raspbian 8 or Raspbian 10
+```
 
+All is straightforward except for slurm on Raspbian 8. We can not use the default slurm version, which is 14.03 and too old. We should compile slurm 18.08 from source on Raspbian 8.
+This is not an easy task. To omit this step, we have packed the binary artifact in deb format. All you should do is all our apt source, update and install slurm 18.08
+on the fly:
+```shell
+echo "deb https://dl.bintray.com/zhaofeng-shu33/raspbian8/ jessie contrib" > /etc/apt/sources.list.d/jessie-slurm.list
+apt-get update
+apt install slurmd=18.08
+```
 
 ## Test User
 The users exist on all computers list above.
