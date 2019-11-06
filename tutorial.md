@@ -34,8 +34,8 @@ The exact configuration is shown in the following table:
 Building a cluster can be divided into three big steps in general:
 
 1. connect your computer to the same local network
-1. configuration of ssh, users and dns server
-1. install the workload manager
+1. installation of software 
+1. configuration the cluster
 
 Our goal is to build a cluster for high performance computing (HPC) purpose. The cluster architecture for other domains may be different. For example,
 workload manager may not be needed. You can skip step 3 if you do not need it.
@@ -50,6 +50,7 @@ After logging in to the manage node. We use `ping` command to test the network c
 use `ping -c 4 10.8.15.92` to test for `zhaofengLapTop`.
 
 ## Configuration
+### Install software
 The first step is to close the firewall service on the system. 
 The service name is called `firewalld` on RHEL derivative. 
 You can also not disable this service but open some ports instead. We omit this configuration.
