@@ -24,7 +24,13 @@ apt-get source slurm-llnl=18.08.5.2-1
 
 The version of the slurm source package can be checked by `apt-cache showsrc slurm-llnl`.
 
-Before you can successfully build the package, you need to change some package version and names to suit the condition of your old distribution.
+Before you can successfully build the package, you need to change some package version and names to suit the condition of your old distribution. At the project root directory:
+```
+# deb-helper >= 9
+sed -i 's/11/9/g' ./debian/control
+# libmysql-dev
+sed -i 's/default-libmysql/libmysql/g' ./debian/control
+```
 
 ```shell
 dpkg-buildpackage -uc -us -j4
