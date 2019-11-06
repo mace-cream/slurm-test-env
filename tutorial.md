@@ -28,7 +28,7 @@ The exact configuration is shown in the following table:
 |--------------|------------------|-------------|--------------------|---------------|----------------------------|
 | x86_64       | CentOS 7.7       | 10.8.15.207 | zhiyuanWorkstation | 19.05         | /etc/slurm/slurm.conf      |
 | x86_64       | Fedora 30        | 10.8.15.92  | zhaofengLapTop     | 19.05         | /etc/slurm/slurm.conf      |
-| armhf        | Raspbian 8       | 10.8.15.88  | raspberrypi        | 19.05         | /etc/slurm.conf            |
+| armhf        | Raspbian 8       | 10.8.15.88  | raspberrypi        | 19.05         | /etc/slurm-llnl/slurm.conf |
 | armhf        | Raspbian 10      | 10.8.15.87  | raspberrypi2       | 18.08         | /etc/slurm-llnl/slurm.conf |
 
 Building a cluster can be divided into three big steps in general:
@@ -58,15 +58,23 @@ Since we use heterogeneous operating systems, they have different package manage
 For Debian series, `apt` is the manager instead. For the software we used, the two series may have different package names, which are
 summarized in the following table.
 
-| Software       | CentOS 7.7      | Fedora 30      | Raspbian 8          | Raspbian 10    |
-|----------------|-----------------|----------------|---------------------|----------------|
-| openssh server | openssh-server  | openssh-server | openssh-server      | openssh-server |
-| slurm          | slurm-slurmctld | slurm-slurmd   | compile from source |  slurmd        |
-| python3        | do not need     |                | compile from source |                |
+| Software       | CentOS 7.7      | Fedora 30      | Raspbian 8          | Raspbian 10       |
+|----------------|-----------------|----------------|---------------------|-------------------|
+| openssh server | openssh-server  | openssh-server | openssh-server      | openssh-server    |
+| munge          | munge           | munge          | munge               | munge             |
+| slurm          | slurm-slurmctld | slurm-slurmd   | compile from source | slurmd            |
+| python         | do not need     |  python3       | python3.4-minimal   | python3.7-minimal |
 
 
 Then we install the openssh server on all nodes. The service name is called `sshd` on
-RHEL and `ssh` on Raspbian.  The package name is called `openssh-server` on all distributions.
+RHEL and `ssh` on Raspbian. The package name is called `openssh-server` on all distributions. Before ssh is installed, we need to use a monitor, mouse and keyboard to
+connect to each node for this configuration. Use the following command to check whether the service is running:
+```shell
+systemctl status sshd
+```
+
+After the installation of openssh server, we can detect the monitor, mouse and keyboard from the computing node. Only power and network cable are necessary.
+
 
 ## Test User
 The users exist on all computers list above.
