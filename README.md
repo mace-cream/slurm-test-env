@@ -20,8 +20,13 @@ The users exist on all computers list above.
 
 `zhaofengt` is the user with sudo privilege on all nodes. You can login to the computers through `ssh` if you are on the 15th floor of C2, Nanshan Park.
 
-[Installation Guide](https://www.slothparadise.com/how-to-install-slurm-on-centos-7-cluster/)
-
+## How to create user with the same UID and GID on same machine?
+With the example user `zhaofengt` and UID = GID = 1010, the command is as follows:
+```shell
+sudo groupadd -g 1010 zhaofengt
+sudo useradd -d /home/zhaofengt -g zhaofengt -u 1010 -s /bin/bash -m zhaofengt
+sudo passwd zhaofengt
+```
 
 ## Test Command
 On manage node, use the following command to test that the whole system works.
@@ -41,13 +46,6 @@ python3 -c "import times;times.sleep(30)"
 * `firewalld` should be disabled on all machines.
 * IP addresses may change when you setup the whole system next time. Modify `slurm.conf` and DNS forward zone file `cluster.local.zone` correspondingly.
 
-## How to create user with the same UID and GID on same machine?
-With the example user `zhaofengt` and UID = GID = 1010, the command is as follows:
-```shell
-sudo groupadd -g 1010 zhaofengt
-sudo useradd -d /home/zhaofengt -g zhaofengt -u 1010 -s /bin/bash -m zhaofengt
-sudo passwd zhaofengt
-```
 
 ## Steps
 Ideally, we should have a router, many wired lines and 4 computers. However, 
@@ -96,6 +94,7 @@ step. As a result, we use heterogeneous architecture to build our cluster test e
    
 Available binary for CentOS 7, see [copr](https://copr.fedorainfracloud.org/coprs/cmdntrf/Slurm19-nvml/package/slurm/)
 
+Reference: [Installation Guide](https://www.slothparadise.com/how-to-install-slurm-on-centos-7-cluster/)
 
 ## job Queue
 zhaofeng's laptop only has two physical cpus. The number of logical cpus is 4 due to hyperthreading. Only two jobs are allowed to run simultaneously. The third job should 
