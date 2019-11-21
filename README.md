@@ -62,6 +62,18 @@ step. As a result, we use heterogeneous architecture to build our cluster test e
    we should compile 19.5 from source code. Actually we do the compilation on the board (instead virtual machine) and notice that it is slow process.
 1. The configuration file is generated using [configurator.easy](https://slurm.schedmd.com/configurator.easy.html). For our configuration, we use `root` to start
    `slurmctld`. That is, `SlurmUser=root`. We use `Cgroup` to track the process; therefore `cgroup.conf` should exist in the same directory of `slurm.conf`on all nodes.   
+1. Install `slurmdbd` package and download `slurmdbd.conf` to directory `/etc/slurm-llnl/`. Start `slurmdbd` daemon and use the following command to
+   create the cluster:
+   ```shell
+   sacctmgr add cluster test-cluster
+   ```
+   Then start the `slurmctld` daemon.
+   Also, you should install `mariadb-server` and create the database user:
+   ```shell
+   create user 'slurm'@'localhost' identified by 'slurm';
+   grant all on slurm_acct_db.* TO 'slurm'@'localhost';
+   flush privileges;
+   ```
 1. Other utilities can help administrators to manage the cluster. For example, we use ssh key to make `ssh raspberrypi` without password prompt; We setup a DNS server.
 
     | service  | package name | distribution | configuration          |
