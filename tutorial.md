@@ -11,13 +11,13 @@ If you want to try to build a test environment of computing cluster and you have
 
 ## Before you start
 In this tutorial, We will use existing resources in our lab: 
-one workstation desktop running CentOS operating system, one laptop running Fedora and two Raspberry Pi boards. 
+one workstation desktop running Ubuntu operating system, one laptop running Ubuntu and two Raspberry Pi boards. 
 That is, We have 4 "computers" in total. 
 Since you may not have the same resources as us, 
 some details may be different. But the general workflow to configure the cluster is the same. 
 
 [Raspberry Pi](https://www.raspberrypi.org/) is a tiny computer used in embedding systems. 
-It runs on arm architecture while our PCs run on x86 architecture. 
+It runs on arm architecture while our PCs run on x64 architecture. 
 We will use the workstation desktop as the manage node for the cluster and the left three as compute nodes. 
 Generally speaking, in production environment we should use the same architecture and operating system to build a cluster. 
 But for our test environment, we don't follow this and use the existing operating system on each machine to achieve our goal.
@@ -25,10 +25,10 @@ But for our test environment, we don't follow this and use the existing operatin
 The exact configuration is shown in the following table:
 
 | architecture | operating system | ip address  | hostname           | slurm version | slurm config file          |
-|--------------|------------------|-------------|--------------------|---------------|----------------------------|
-| x86_64       | CentOS 7.7       | 10.8.15.207 | zhiyuanWorkstation | 19.05         | /etc/slurm/slurm.conf      |
-| x86_64       | Fedora 30        | 10.8.15.92  | zhaofengLapTop     | 19.05         | /etc/slurm/slurm.conf      |
-| armhf        | Raspbian 8       | 10.8.15.88  | raspberrypi        | 19.05         | /etc/slurm-llnl/slurm.conf |
+| ------------ | ---------------- | ----------- | ------------------ | ------------- | -------------------------- |
+| x86_64       | Ubuntu 19.04     | 10.8.15.207 | zhiyuanWorkstation | 18.08         | /etc/slurm-llnl/slurm.conf |
+| x86_64       | Ubuntu 19.04     | 10.8.15.92  | zhaofengLapTop     | 18.08         | /etc/slurm-llnl/slurm.conf |
+| armhf        | Raspbian 8       | 10.8.15.88  | raspberrypi        | 18.08         | /etc/slurm-llnl/slurm.conf |
 | armhf        | Raspbian 10      | 10.8.15.87  | raspberrypi2       | 18.08         | /etc/slurm-llnl/slurm.conf |
 
 Building a cluster can be divided into three big steps in general:
@@ -43,7 +43,7 @@ workload manager may not be needed. You can skip step 3 if you do not need it.
 Below we will show in detail how I finish the three steps.
 
 ## Connection
-To make the cluster more stable, we use wired cable to connect each computer to the cable socket. 
+To make the cluster more stable, we use wired cable to connect each computer to a mini switch. You can buy one which has 5 Ethernet interfaces  from the market. 
 You should document the ip address of each computer for later usage.
 Since I use `zhiyuanWorkstation` as the manage node, which has the monitor connected to the host, I can login to this host locally with the keyboard.
 After logging in to the manage node. We use `ping` command to test the network connection between the manage node and each compute node. For example,
@@ -51,55 +51,33 @@ use `ping -c 4 10.8.15.92` to test for `zhaofengLapTop`.
 
 ## Installation
 
-The first step is to close the firewall service on the system. 
-The service name is called `firewalld` on RHEL derivative. 
-You can also not disable this service but open some ports instead. We omit this configuration.
+Since you are only building a test environment in intranet, you can disable the firewalls to avoid later trouble. The security vulnerability overhead is little as you can enable the firewall later on. You can also not disable this service but open some ports instead. We omit this configuration.
 
-Since we use heterogeneous operating systems, they have different package managers. For RHEL series, `yum` is the package manager.
-For Debian series, `apt` is the manager instead. For the software we used, the two series may have different package names, which are
-summarized in the following table.
+Although we use heterogeneous operating systems, they are all debian-based, which means the package name is identical. `apt` is the manager. I recommend you to install `openssh-server` on all nodes to ease the configuration. Since you do not need to connect a display monitor, mouse and keyboard to each device for local login to configure the device. The requirement is to install `slurmctld` and `slurmd` package on your chosen manage node and `slurmd` on other nodes.
 
-| Software       | CentOS 7.7      | Fedora 30      | Raspbian 8          | Raspbian 10       |
-|----------------|-----------------|----------------|---------------------|-------------------|
-| openssh server | openssh-server  | openssh-server | openssh-server      | openssh-server    |
-| munge          | munge           | munge          | munge               | munge             |
-| slurm          | slurm-slurmctld | slurm-slurmd   | compile from source | slurmd            |
-| python         | do not need     | python3        | python3.4-minimal   | python3.7-minimal |
+ Installation of software using `apt` is easy, just type `sudo apt install package_name` and you are done.
 
+There is a special case for slurm on Raspbian 8. You can omit this paragraph if you choose to upgrade your system. If not, you can not use the default slurm version, which is 14.03 and too old. You should compile slurm 18.08 from source on Raspbian 8.
+This is not an easy task. To omit this step, we have packed the binary artifact in deb format. All you should do is all our apt source, update and install slurm 18.08 on the fly:
 
-Then we install the openssh server on all nodes. The service name is called `sshd` on
-RHEL and `ssh` on Raspbian. The package name is called `openssh-server` on all distributions. Before ssh is installed, we need to use a monitor, mouse and keyboard to
-connect to each node for this configuration. Use the following command to check whether the service is running:
-```shell
-systemctl status sshd
-```
-
-After the installation of openssh server, we can detect the monitor, mouse and keyboard from the computing node. Only power and network cable are necessary.
-Then you can use the package manager to install `munge`, `slurm` and `python` on each platform. 
-```shell
-yum install munge # on CentOS 7.7 or Fedora 30
-apt install munge # on Raspbian 8 or Raspbian 10
-```
-
-All is straightforward except for two cases:
-```shell
-curl https://copr.fedorainfracloud.org/coprs/cmdntrf/Slurm19-nvml/repo/epel-7/cmdntrf-Slurm19-nvml-epel-7.repo -o /etc/yum.repo.d/slurm.repo
-yum makecache
-yum install slurm-slurmctld
-```
-
-slurm on Raspbian 8. We can not use the default slurm version, which is 14.03 and too old. We should compile slurm 18.08 from source on Raspbian 8.
-This is not an easy task. To omit this step, we have packed the binary artifact in deb format. All you should do is all our apt source, update and install slurm 18.08
-on the fly:
 ```shell
 echo "deb https://dl.bintray.com/zhaofeng-shu33/raspbian8/ jessie contrib" > /etc/apt/sources.list.d/jessie-slurm.list
 apt-get update
-apt install slurmd=18.08
+apt install slurmd=18.08 # for raspbian 8
 ```
 ## Configuration
+### openssh-server
+
+If you install `openssh-server`, you need to configure it to ease the configuration of other softwares. For example, you can set ssh login without password using the following command:
+
+```shell
+ssh-keygen -t rsa # generated public and private keys in ~/.ssh/
+ssh-copy-id zhaofengt@raspberrypi # use the ip address of raspberrypi instead
+```
+
 ### Test User
-When installing new softwares, we act as a sudo user. But for our computing cluster to work, we need to ensure that users with the same name, user id and group id 
-exists on all nodes.
+
+When installing new softwares, we act as a sudo user. But for our computing cluster to work, we need to ensure that users with the same name, user id and group id exists on all nodes.
 
 We use the following two users:
 
@@ -116,7 +94,8 @@ sudo passwd zhaofengt
 ```
 You should execute it on each node respectively.
 ### Configure Munge
-Generally there are two steps to configure the munge:
+`Munge` is the authentication library used by slurm extensively. You need to make sure `munge` work before you proceed to configure slurm itself. Generally there are two steps to configure the munge:
+
 1. generate `munge.key` and copy it to all nodes
 2. start the `munge` service on all nodes
 
@@ -126,18 +105,38 @@ dd if=/dev/urandom bs=1 count=1024 > /etc/munge/munge.key
 echo "foo" >/etc/munge/munge.key
 ```
 
-The `munge.key` should be the same on all machines. You can use `scp` to transfer this file to other machines on the same location.
-Then use the following command to start the munge daemon:
+The `munge.key` should be the same on all machines. You can use `scp` to transfer this file to other machines on the same location. You need to change `munge.key` permission to `400`, which means only file owner can read this file; also the owner and group for `munge.key` should be `munge`.
+
 ```shell
-systemctl start munge
+sudo chmod 400 /etc/munge/munge.key
+sudo chown munge /etc/munge/munge.key
+sudo chgrp munge /etc/munge/munge.key
+```
+
+
+
+Then use the following command to start the munge daemon and make sure it works:
+
+```shell
+sudo systemctl start munge
 systemctl status munge
-journalctl -u munge -r # reverse
+sudo journalctl -u munge -r # reverse
+```
+
+If any service does not work, you can use `journalctl` to check its message, similar as above.
+
+If you have configured openssh, you can check whether munge works across nodes:
+
+```shell
+unmunge | ssh raspberrypi munge -n
 ```
 
 ### Configure slurm
-Slurm has two configuration files: `slurm.conf` and `cgroup.conf`. The location of `slurm.conf` is not all the same on different machines and is shown in previous table.
-`cgroup.conf` should be put in the same directory of `slurm.conf`. The content of these two files should be the same on all machines.
+
+Slurm has two configuration files: `slurm.conf` and `cgroup.conf`. They are located in `/etc/slurm-llnl/`.
+The content of these two files should be the same on all machines.
 The content of `slurm.conf` is as follows:
+
 ```
 SlurmctldHost=zhiyuanWorkstation(10.8.15.207)
 MpiDefault=none
@@ -190,12 +189,6 @@ The content of `job.sh` is as follows:
 python3 -c "import times;times.sleep(30)"
 ```
 
-
-
-
-
-
-   
 
 
 
