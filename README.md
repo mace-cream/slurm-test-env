@@ -136,6 +136,5 @@ You need 4 workstation positions. One should be relatively stable, which is used
 computing nodes. You can three `raspberrypi`. Each "pi" should be powered and connected to the local network by network cable.
 
 Below are some pictures about our environment:
-![](laptop_and_login_node.jpg)
-![](raspberrypi.jpg)
+![](switch.jpg)
 ![](zhiyuanWorkstation.jpg)
