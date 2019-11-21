@@ -42,7 +42,6 @@ python3 -c "import times;times.sleep(30)"
 ```
 
 ## Known Issues
-* `slurmd` cannot be started as system daemon service on `zhaofengLapTop`. Use `sudo slurmd` instead. No need to kill old `slurmd` as the newly start process will replace the old one automatically.
 * `firewalld` should be disabled on all machines.
 * IP addresses may change when you setup the whole system next time. Modify `slurm.conf` and DNS forward zone file `cluster.local.zone` correspondingly.
 
