@@ -176,20 +176,19 @@ The service name is called `slurmctld` on manage node and `slurmd` on computing 
 
 
 ### Test Command
-After all daemon process started, you can test the computing cluster using test accound. First, ssh login to the manage node using `zhaofengt`.
+After all daemon process started, you can test the computing cluster using test account. First, ssh login to the manage node using `zhaofengt`.
 On manage node, use the following command to test that the whole system works.
+
 ```shell
 srun -w zhaofengLapTop hostname
 srun -w raspberrypi,raspberrypi2 /bin/hostname
 sbatch --array=0-9 job.sh
 ```
-The content of `job.sh` is as follows:
+If `python3` is installed on all computing nodes. The content of `job.sh` is as follows:
 ```shell
 #!/bin/bash
-python3 -c "import times;times.sleep(30)"
+python3 -c "import time;time.sleep(30)"
 ```
-
-
 
 
 
