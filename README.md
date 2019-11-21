@@ -34,11 +34,12 @@ On manage node, use the following command to test that the whole system works.
 srun -w zhaofengLapTop hostname
 srun -w raspberrypi,raspberrypi2 /bin/hostname
 sbatch --array=0-9 job.sh
+
 ```
 The content of `job.sh` is as follows:
 ```shell
 #!/bin/bash
-python3 -c "import times;times.sleep(30)"
+python3 -c "import time;time.sleep(30)"
 ```
 
 ## Known Issues
