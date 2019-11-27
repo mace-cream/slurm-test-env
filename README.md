@@ -138,3 +138,6 @@ computing nodes. You can three `raspberrypi`. Each "pi" should be powered and co
 Below are some pictures about our environment:
 ![](switch.jpg)
 ![](zhiyuanWorkstation.jpg)
+
+## Related Work
+* [由32块树莓派构建的超级计算机](http://shumeipai.nxez.com/2014/01/09/raspberry-pi-from-the-32-built-supercomputer.html)
