@@ -9,6 +9,8 @@
 
 `zhiyuanWorkstation` is the manage node.
 
+You can change the computer hostnames to suit your need, See [How to change hostnames](https://www.cyberciti.biz/faq/ubuntu-change-hostname-command/).
+
 ## Test User
 The users exist on all computers list above.
 
