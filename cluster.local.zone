@@ -9,7 +9,7 @@ $TTL 604800
 
                          IN NS zhiyuanWorkstation.cluster.local.
 
-zhiyuanWorkstation       IN A 10.8.15.207
+zhiyuanWorkstation       IN A 10.8.15.136
 zhaofengLapTop           IN A 10.8.15.92
 raspberrypi              IN A 10.8.15.88
 raspberrypi2             IN A 10.8.15.87 
