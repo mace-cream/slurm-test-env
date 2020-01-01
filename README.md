@@ -83,7 +83,8 @@ step. As a result, we use heterogeneous architecture to build our cluster test e
     | named    | bind         | RHEL         | `/etc/named.conf` |
     | bind9    | bind9        | Debian       | `/etc/bind/named.conf`      |
 
-   setup file of forward zone can be found at this repository (`cluster.local.zone`). Also remember to add the following entry to this file:
+   setup file of forward zone can be found at this repository (`cluster.local.zone`). This zone file should be put in directory pointed by `option directory` in `named.conf`
+   Also remember to add the following entry to `named.conf` or its included file:
    ```
    zone "cluster.local" IN {
         type master;
