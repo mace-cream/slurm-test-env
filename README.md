@@ -5,6 +5,7 @@
 | x86_64       | Ubuntu 19.04     | 10.8.15.136 | zhiyuanWorkstation | 18.08         | /etc/slurm-llnl/slurm.conf |
 | x86_64       | Ubuntu 19.04     | 10.8.15.92  | zhaofengLapTop     | 18.08         | /etc/slurm-llnl/slurm.conf |
 | x86_64       | Ubuntu 19.04     | 10.8.15.63  | zhoutianWorkstation | 18.08         | /etc/slurm-llnl/slurm.conf |
+| x86_64       | Ubuntu 19.04     | 10.8.15.247  | zhaofengWorkstation | 18.08         | /etc/slurm-llnl/slurm.conf |
 | armhf        | Raspbian 8       | 10.8.15.88  | raspberrypi        | 18.08         | /etc/slurm-llnl/slurm.conf |
 | armhf        | Raspbian 10      | 10.8.15.87  | raspberrypi2       | 18.08         | /etc/slurm-llnl/slurm.conf |
 
