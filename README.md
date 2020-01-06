@@ -118,15 +118,6 @@ Reference: [Installation Guide](https://www.slothparadise.com/how-to-install-slu
 zhaofeng's laptop only has two physical cpus. The number of logical cpus is 4 due to hyperthreading. Only two jobs are allowed to run simultaneously. The third job should 
 wait.
 
-## Tunneling
-If you are not on 15th floor, assume the following command is executed on `zhiyuanWorkstation` and the session is kept.
-```shell
-ssh -R 10.8.4.170:8990:10.8.15.207:22 feng@10.8.4.170
-```
-Then you can login via
-```shell
-ssh -p 8990 zhaofengt@localhost # on bcm server
-```
 ## TroubleShooting
 If one node get unexpected reboot, the node state is still down even after `slurmd` daemon is running properly on this node. To fix this problem, run the following
 command on manage node (suppose the problem is with node `raspberrypi2`):
