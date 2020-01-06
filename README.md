@@ -77,14 +77,11 @@ step. As a result, we use heterogeneous architecture to build our cluster test e
    grant all on slurm_acct_db.* TO 'slurm'@'localhost';
    flush privileges;
    ```
-1. Other utilities can help administrators to manage the cluster. For example, we use ssh key to make `ssh raspberrypi` without password prompt; We setup a DNS server.
+1. Other utilities can help administrators to manage the cluster. For example, we use ssh key to make `ssh raspberrypi` without password prompt; We setup a DNS server. The service name is `bind9`, same to
+   the package name, the configuration file is at `/etc/bind/named.conf`.
 
-    | service  | package name | distribution | configuration          |
-    |----------|--------------|--------------|------------------------|
-    | named    | bind         | RHEL         | `/etc/named.conf` |
-    | bind9    | bind9        | Debian       | `/etc/bind/named.conf`      |
-
-   setup file of forward zone can be found at this repository (`cluster.local.zone`). This zone file should be put in directory pointed by `option directory` in `named.conf`
+   setup file of forward zone can be found at this repository (`cluster.local.zone`). This zone file should be put in directory pointed by `option directory` in `named.conf` (which is
+   `/var/cache/bind` directory)
    Also remember to add the following entry to `named.conf` or its included file:
    ```
    zone "cluster.local" IN {
@@ -131,10 +128,3 @@ With the test environment, we can submit some test jobs and observe the queue be
 ## How to setup the hardware again on the 15th floor
 You need 4 workstation positions. One should be relatively stable, which is used as manage node. We recommend to use desktop computer as manage node. For the other three 
 computing nodes. You can three `raspberrypi`. Each "pi" should be powered and connected to the local network by network cable.
-
-Below are some pictures about our environment:
-![](switch.jpg)
-![](zhiyuanWorkstation.jpg)
-
-## Related Work
-* [由32块树莓派构建的超级计算机](http://shumeipai.nxez.com/2014/01/09/raspberry-pi-from-the-32-built-supercomputer.html)
