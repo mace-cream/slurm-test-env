@@ -20,3 +20,4 @@ When you install `libnss-ldap` for client, the configuration will pop out automa
 passwd:         files systemd ldap
 group:          files systemd ldap
 ```
+Afterwards, run `sudo pam-auth-update` to add the functionality to auto create the home directory for LDAP users.
