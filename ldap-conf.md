@@ -15,3 +15,8 @@ is in this repository, to be used like this:
 ldapadd -x -D cn=admin,dc=cluster,dc=local -W -f add_content.ldif
 ```
 
+When you install `libnss-ldap` for client, the configuration will pop out automatrically, fill in ldap server address: `ldap://10.8.15.136`; Then modify `/etc/nsswitch.conf` to add `ldap` authentication.
+```
+passwd:         files systemd ldap
+group:          files systemd ldap
+```
