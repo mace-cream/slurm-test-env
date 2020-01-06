@@ -97,6 +97,8 @@ step. As a result, we use heterogeneous architecture to build our cluster test e
    search cluster.local
    nameserver 127.0.0.1
    ```
+   For other machines to use manage node as dns server, change the `nameserver` to `10.8.15.136`.
+   
    We also use the `pdsh` utility (with gender database) to execute
    commands on multiple nodes. The test command is `pdsh -A python3 --version`. With this command, the output is as follows:
    ```
