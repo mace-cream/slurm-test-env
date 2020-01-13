@@ -12,15 +12,15 @@
 You can change the computer hostnames to suit your need, See [How to change hostnames](https://www.cyberciti.biz/faq/ubuntu-change-hostname-command/).
 
 ## Test User
-The users exist on all computers list above.
+The user `john` exist on all computers list above.
 
-| username  | passwd      | uid  | gid  |
-|-----------|-------------|------|------|
-| zhaofengt | fengzhao    | 1010 | 1010 |
-| zhiyuant  | qinghua2019 | 1011 | 1011 |
+| username  | passwd      | uid  | gid  | exist |
+|-----------|-------------|------|------|-------|
+| zhaofengt | fengzhao    | 1010 | 1010 | local |
+| zhiyuant  | qinghua2019 | 1011 | 1011 | local |
+| john      | 123456      | 10000 | 5000 | ldap  |
 
-
-`zhaofengt` is the user with sudo privilege on all nodes. You can login to the computers through `ssh` if you are on the 15th floor of C2, Nanshan Park.
+`zhaofengt` is the user with sudo privilege on manage node. You can login to the computers through `ssh` if you are on the 15th floor of C2, Nanshan Park.
 
 ## How to create user with the same UID and GID on same machine?
 With the example user `zhaofengt` and UID = GID = 1010, the command is as follows:
