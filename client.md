@@ -20,4 +20,4 @@ Usually the user does not need to modify the configuration file by hand; The GUI
 
 ## DNS local daemon
 
-The dns is controled by `systemd-resolved` daemon, which reads the configuration file `resolved.conf`. There are many files with the same name on the system.  For example, `/run/systemd/resolve/resolv.conf` is a dynamically generated file.
+The dns is controled by `systemd-resolved` daemon, which reads the configuration file `resolved.conf`. There are many files with the same name on the system.  To refresh DNS after changing configuration of `network-manager`. This daemon can be restarted.
