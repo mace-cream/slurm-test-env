@@ -8,6 +8,8 @@ install package `tftpd-hpa` and the service root directory is `/var/lib/tftpboot
 
 Download `netboot.tar.gz` from official mirror. For example [tuna](http://mirrors.tuna.tsinghua.edu.cn/debian/dists/buster/main/installer-amd64/current/images/netboot/netboot.tar.gz)
 
+TFTP service will listen to port 69 for UDP traffic.
+
 ## DHCP
 install package `isc-dhcp-server` and modify the configuration file `/etc/dhcp/dhcpd.conf` according to the following:
 
@@ -37,4 +39,7 @@ group {
   }
 }
 ```
-Then start the `isc-dhcp-server` service daemon.
+Then start the `isc-dhcp-server` service daemon. The service will listen to port 67 for UDP traffic.
+
+## Client
+Enter BIOS setting and select NIC Booting as first option. Usually it is from Legacy Boot options.
