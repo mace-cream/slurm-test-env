@@ -17,3 +17,7 @@ The configuration part is persistent after rebooting. The temporary files which 
 All the above comes from the package `network-manager`.
 
 Usually the user does not need to modify the configuration file by hand; The GUI program `nm-connection-editor`(comes from package network-manager-gnome) provides a useful interface to edit configuration file of `NetworkManager`. Notice that to make the changes appliable. We should restart the `NetworkManager` daemon in some cases.
+
+## DNS local daemon
+
+The dns is controled by `systemd-resolved` daemon, which reads the configuration file `resolved.conf`. There are many files with the same name on the system.  For example, `/run/systemd/resolve/resolv.conf` is a dynamically generated file.
