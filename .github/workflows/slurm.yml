@@ -5,7 +5,8 @@ jobs:
     runs-on: self-hosted
 
     steps:
-    - uses: actions/checkout@v2
+    - name: checkout
+      run: curl -O -L https://raw.githubusercontent.com/zhaofeng-shu33/slurm-test-env/master/build.sh
     - name: run script
       run: bash build.sh
 
