@@ -1,7 +1,8 @@
-name: zhaofeng-shu33
+name: compile
 on: [push]
 jobs:
   build:
+    name: zhaofeng-shu33
     runs-on: self-hosted
 
     steps:
