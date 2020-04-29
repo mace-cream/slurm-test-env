@@ -1,4 +1,4 @@
-name: compile
+name: zhaofeng-shu33
 on: [push]
 jobs:
   build:
