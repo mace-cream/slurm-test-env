@@ -45,3 +45,8 @@ apt-get -o Acquire::Check-Valid-Until=false update
 apt-get install -t jessie-backports install debhelper # will upgrade the version
 ```
 ```
+
+## Build log
+[Official build log](http://buildd.raspbian.org/status/fetch.php?pkg=slurm-llnl&arch=armhf&ver=14.03.9-5%2Bdeb8u5&stamp=1584378384) for `slurm 14.03` on `jessie`;
+
+Custom build log can be found on GitHub Action logs of this repo.
