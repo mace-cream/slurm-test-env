@@ -4,7 +4,7 @@ echo "hello world"
 cd ~/
 # remove old deb file
 find ./ -maxdepth 1 -name "*.deb" | grep 18.08.5.2 | xargs rm -f
-cd slurm-llnl-18.08.5.2
+cd slurm-llnl-18.08
 # https://gitee.com/freewind201301/slurm-llnl-18.08
 git rev-parse --verify HEAD
 dpkg-buildpackage -uc -us
