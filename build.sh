@@ -1,12 +1,14 @@
 #!/bin/bash
 set -e -x
-echo "hello world"
 cd ~/
 # remove old deb file
 find ./ -maxdepth 1 -name "*.deb" | grep 18.08.5.2 | xargs rm -f
-cd slurm-llnl-18.08
-# https://gitee.com/freewind201301/slurm-llnl-18.08
-git rev-parse --verify HEAD
+# get source
+apt-get source slurm-llnl
+cd slurm-llnl-18.08.5.2
+# change the version of deps
+sed -i 's/11/9/g' ./debian/control
+sed -i 's/default-libmysql/libmysql/g' ./debian/control
 dpkg-buildpackage -uc -us
 cd ..
 # list artifact
