@@ -3,7 +3,7 @@
 | architecture | operating system | ip address  | hostname           | slurm version | slurm config file          |
 |--------------|------------------|-------------|--------------------|---------------|----------------------------|
 | x86_64       | Ubuntu 19.04     | 10.8.15.136 | zhiyuanWorkstation | 18.08         | /etc/slurm-llnl/slurm.conf |
-| x86_64       | Ubuntu 19.04     | 10.8.15.63  | zhoutianWorkstation | 18.08         | /etc/slurm-llnl/slurm.conf |
+| x86_64       | Ubuntu 19.04     | 10.8.15.60  | zhoutianWorkstation | 18.08         | /etc/slurm-llnl/slurm.conf |
 | x86_64       | Debian buster     | 10.8.15.59  | debian | -         | - |
 | armhf        | Raspbian 8       | 10.8.15.88  | raspberrypi        | 18.08         | /etc/slurm-llnl/slurm.conf |
 | armhf        | Raspbian 10      | 10.8.15.87  | raspberrypi2       | 18.08         | /etc/slurm-llnl/slurm.conf |
