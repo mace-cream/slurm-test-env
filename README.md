@@ -6,6 +6,7 @@
 | x86_64       | Ubuntu 20.04     | 10.8.15.60  | zhoutianWorkstation | 18.08         | /etc/slurm-llnl/slurm.conf |
 | x86_64       | Debian 10     | 10.8.15.59  | debian | -         | - |
 | armhf        | Raspbian 10       | 10.8.15.61 | raspberrypi        | -         | - |
+| armhf        | Raspbian 10       | 10.8.15.39 | raspberrypi        | -         | - |
 | armhf        | Raspbian 10      | 10.8.15.87  | raspberrypi2       | 18.08         | /etc/slurm-llnl/slurm.conf |
 
 `zhiyuanWorkstation` is the manage node.
@@ -22,6 +23,9 @@ The user `john` exist on all computers list above.
 | john      | 123456      | 10000 | 5000 | ldap  |
 
 `zhaofengt` is the user with sudo privilege on manage node. You can login to the computers through `ssh` if you are on the 15th floor of C2, Nanshan Park.
+
+For machines with hostname equal to raspberrypi, the test user is `pi` with password `raspberry`. This is the default user and password
+of the official OS image.
 
 ## How to create user with the same UID and GID on same machine?
 With the example user `zhaofengt` and UID = GID = 1010, the command is as follows:
