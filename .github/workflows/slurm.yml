@@ -1,5 +1,5 @@
 name: compile
-on: [push]
+on: [push.ci]
 jobs:
   build:
     runs-on: self-hosted
