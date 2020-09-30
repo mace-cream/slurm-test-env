@@ -4,10 +4,10 @@
 |--------------|------------------|-------------|--------------------|---------------|----------------------------|
 | x86_64       | Debian 10     | 10.8.31.69  | debian | -         | - |
 | armhf        | Raspbian 10       | 10.8.31.220 | raspberrypi        | -         | - |
-| armhf        | Raspbian 10       | 10.8.31.102 | raspberrypi        | -         | - |
 | armhf        | Raspbian 10      | 10.8.31.27  | raspberrypi2       | 18.08         | /etc/slurm-llnl/slurm.conf |
+| armhf        | Raspbian 10       | 10.8.31.102 | raspberrypi3        | -         | - |
 
-`zhiyuanWorkstation` is the manage node.
+`debian` is the manage node.
 
 You can change the computer hostnames to suit your need, See [How to change hostnames](https://www.cyberciti.biz/faq/ubuntu-change-hostname-command/).
 
