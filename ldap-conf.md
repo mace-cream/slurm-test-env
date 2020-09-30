@@ -23,3 +23,6 @@ group:          files systemd ldap
 Then run `sudo systemctl restart nscd` to restart the named service.
 
 Afterwards, run `sudo pam-auth-update` to add the functionality if you want to auto create the home directory for LDAP users.
+
+Known issues: if you use `ldaps`, you may need to disable client verification by adding
+one configuration entry to `/etc/ldap/ldap.conf`: `TLS_REQCERT never`.
