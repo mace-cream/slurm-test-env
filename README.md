@@ -12,17 +12,10 @@
 You can change the computer hostnames to suit your need, See [How to change hostnames](https://www.cyberciti.biz/faq/ubuntu-change-hostname-command/).
 
 ## Test User
-The user `john` exist on all computers list above.
 
-| username  | passwd      | uid  | gid  | exist |
-|-----------|-------------|------|------|-------|
-| zhaofengt | fengzhao    | 1010 | 1010 | local |
-| zhiyuant  | qinghua2019 | 1011 | 1011 | local |
-| john      | 123456      | 10000 | 5000 | ldap  |
+`zhaofengt` is the user on raspberrypi2. The password is `fengzhao`.
 
-`zhaofengt` is the user with sudo privilege on manage node. You can login to the computers through `ssh` if you are on the 15th floor of C2, Nanshan Park.
-
-For machines with hostname equal to raspberrypi, the test user is `pi` with password `raspberry`. This is the default user and password
+For machines with hostname equal to raspberrypi and raspberrypi3, the test user is `pi` with password `raspberry`. This is the default user and password
 of the official OS image.
 
 ## How to create user with the same UID and GID on same machine?
